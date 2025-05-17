@@ -27,7 +27,6 @@ function App() {
     alt="Logo" 
     className="h-10 mt-1 mr-4 cursor-pointer"
     onClick={() => window.location.reload()}
-    onHover
   />
 </div>
           <div className="w-full md:w-2/3 lg:w-1/2">

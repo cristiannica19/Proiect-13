@@ -2,9 +2,6 @@
 const MovieInfo = ({ movieInfo }) => {
   // Obținerea recomandării bazate pe rating
   const getRecommendation = () => {
-    if (!movieInfo || !movieInfo.Ratings || movieInfo.Ratings.length === 0) {
-      return { text: 'Nu există suficiente informații pentru a face o recomandare.', color: 'yellow' };
-    }
     
     // Încercăm să găsim rating-ul Rotten Tomatoes
     const rtRating = movieInfo.Ratings.find(rating => rating.Source === 'Rotten Tomatoes');
@@ -88,7 +85,6 @@ const MovieInfo = ({ movieInfo }) => {
               <img
                 className="h-96 w-64 object-cover rounded-md shadow-2xl transform transition-transform duration-500 hover:scale-105"
                 src={movieInfo.Poster}
-                alt={`Poster pentru ${movieInfo.Title}`}
               />
             ) : (
               <div className="h-96 w-64 flex items-center justify-center bg-gray-800 rounded-md">

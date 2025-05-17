@@ -6,9 +6,9 @@ const CacheManager = ({ cacheSize, clearExpiredCache, clearCache }) => {
   return (
     <div className="bg-gray-900 rounded-md overflow-hidden transition-all duration-300 border border-gray-800">
      
-      {/* Header colapsabil */}
+      {/* Header */}
       <button 
-        className="w-full px-4 py-3 flex justify-between items-center focus:outline-none"
+        className="w-full px-4 py-3 flex justify-between items-center focus:outline-none cursor-pointer"
         onClick={() => setIsExpanded(!isExpanded)}
       >
           <h3 className="text-lg font-medium text-gray-300">Setări avansate</h3>

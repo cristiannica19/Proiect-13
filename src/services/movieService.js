@@ -2,7 +2,7 @@
 // Constanta pentru expirarea cache-ului (24 ore)
 const CACHE_EXPIRATION = 24 * 60 * 60 * 1000;
 
-// Cheia API -
+// Cheia API 
 const API_KEY = import.meta.env.VITE_APICHEIE;
 
 /**
