@@ -1,3 +1,15 @@
+// Aici actualizam starea interfetei în funcție de rezultate 
+
+{/* - SearchBar -> actualizează starea movieName prin setMovieName
+    - Utilizatorul apasă butonul de căutare → se declanșează handleSearch din useMovieSearch.js
+    - handleSearch setează loading la true și șterge eventualele erori
+    - handleSearch apelează getCachedMovie din movieService.js pentru a verifica cache-ul
+    - Daca filmul nu exista în cache, handleSearch apelează searchMovie din movieService.js
+    - Dupa primirea datelor, handleSearch apelează cacheMovie pentru a le salva local
+    - handleSearch actualizeaza starea movieInfo si loading pentru a reflecta rezultatul
+    - Componenta App rerandează interfața în funcție de noile stări 
+*/}
+
 import { useState, useEffect } from 'react';
 import { 
   searchMovie, 
@@ -8,18 +20,14 @@ import {
   clearExpiredCache 
 } from '../services/movieService';
 
-/**
- * Hook personalizat pentru gestionarea căutării de filme și a stării asociate.
- * Acest hook extrage întreaga logică din componenta principală și o
- * încapsulează într-un mod reutilizabil.
- */
+
 const useMovieSearch = () => {
   // Stările pentru gestionarea căutării filmelor
-  const [movieName, setMovieName] = useState('');
-  const [movieInfo, setMovieInfo] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [movieName, setMovieName] = useState('');  // titlu introdus de utilizator
+  const [movieInfo, setMovieInfo] = useState(null); // datele filmului din API sau cache
+  const [loading, setLoading] = useState(false); // indicator daca e o cerere in curs
   const [error, setError] = useState(null);
-  const [cacheSize, setCacheSize] = useState(0);
+  const [cacheSize, setCacheSize] = useState(0); // numarul de filme stocate in localStorage
   
   // Actualizarea informațiilor despre cache la încărcarea componentei
   useEffect(() => {
@@ -58,7 +66,7 @@ const useMovieSearch = () => {
     }
   };
   
-  // Actualizează dimensiunea cache-ului
+  // Actualizează dimensiunea cache-ului in UI
   const updateCacheSize = () => {
     setCacheSize(getCacheSize());
   };
@@ -69,13 +77,12 @@ const useMovieSearch = () => {
     updateCacheSize();
   };
   
-  // Wrapper pentru clearExpiredCache care actualizează și starea
+  // Stergem si actualizam și starea in UI
   const handleClearExpiredCache = () => {
     clearExpiredCache();
     updateCacheSize();
   };
   
-  // Returnăm toate stările și funcțiile pentru a fi folosite în componente
   return {
     movieName,
     setMovieName,

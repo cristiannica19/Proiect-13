@@ -1,40 +1,35 @@
 
 const MovieInfo = ({ movieInfo }) => {
-  // Obținerea recomandării bazate pe rating
+  // Obținerea recomandarii bazate pe rating
+  
+  {/*
+    -Cautare în array-ul Ratings primul element unde Source === 'Rotten Tomatoes'. Dacă îl gaseste, find întoarce un obiect { Source: 'Rotten Tomatoes', Value: '87%' } de ex. 
+   - Dacă movieInfo.imdbRating exista si e diferit de '' sau 'N/A' atunci se evalueaza si se întoarce obiectul { Value: String(...) }. Math.round(movieInfo.imdbRating * 10) convertește nota IMDB: ex. 7.4 in 74.
+   */ }
+
   const getRecommendation = () => {
-    
-    // Încercăm să găsim rating-ul Rotten Tomatoes
-    const rtRating = movieInfo.Ratings.find(rating => rating.Source === 'Rotten Tomatoes');
-    
-    if (!rtRating && movieInfo.Ratings.length >= 2) {
-      // Folosim al doilea rating disponibil dacă nu există Rotten Tomatoes
-      const score = parseInt(movieInfo.Ratings[1].Value.replace(/[^0-9]/g, ''));
-      return getRecommendationByScore(score);
-    } 
-    
-    else if (rtRating) {
-      const score = parseInt(rtRating.Value.replace('%', ''));
-      return getRecommendationByScore(score);
-    } 
-    
-    else if (movieInfo.imdbRating) {
-      // Folosim rating-ul IMDB dacă nu avem alte ratinguri
-      const score = parseFloat(movieInfo.imdbRating) * 10;
-      return getRecommendationByScore(score);
-    }
-    
-    return { text: 'Nu există suficiente informații pentru a face o recomandare.', color: 'yellow' };
+    const siteRecomandare = 
+    movieInfo.Ratings.find(s => s.Source === 'Rotten Tomatoes') 
+      || (movieInfo.imdbRating && { Value: String(Math.round(movieInfo.imdbRating * 10)) }); 
+             if (!siteRecomandare) {
+            return { text: 'Nu există suficiente informații...', color: 'yellow' }; // Daca n-avem nici Rotten Tomatoes, nici IMDB 
+          }
+    // Elimină tot ce nu e cifra din șirul Value (daca avem 87% ramane doar 87 de ex) si se converteste sirul intr-un numar intreg in baza 10
+    const numeric = parseInt(siteRecomandare.Value.replace(/[^0-9]/g, ''), 10); 
+ 
+    // trimitem numarul apoi la getRecommendationByScore
+    return getRecommendationByScore(numeric);
   };
   
   // Obține recomandarea în funcție de scor
-  const getRecommendationByScore = (score) => {
-    if (score > 80) {
+  const getRecommendationByScore = (numeric) => {
+    if (numeric > 80) {
       return { 
         text: 'Ar trebui să vizionați acest film chiar acum!', 
         color: 'green',
         icon: '👍'
       };
-    } else if (score < 50) {
+    } else if (numeric < 50) {
       return { 
         text: 'Nu recomandăm acest film!', 
         color: 'red',
@@ -92,16 +87,10 @@ const MovieInfo = ({ movieInfo }) => {
         <div className="relative grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
           {/* Poster film */}
           <div className="flex items-center justify-center md:col-span-1">
-            {movieInfo.Poster && movieInfo.Poster !== 'N/A' ? (
               <img
                 className="h-96 w-64 object-cover rounded-md shadow-2xl transform transition-transform duration-500 hover:scale-105"
                 src={movieInfo.Poster}
               />
-            ) : (
-              <div className="h-96 w-64 flex items-center justify-center bg-gray-800 rounded-md">
-                <span className="text-gray-500">Poster indisponibil</span>
-              </div>
-            )}
           </div>
           
           {/* Informații despre film */}
@@ -118,7 +107,7 @@ const MovieInfo = ({ movieInfo }) => {
               <span className="text-gray-400">{movieInfo.Runtime}</span>
             </div>
             
-            {/* Ratinguri IMDb, RottenTomatoes, etc */}
+            {/* Ratinguri IMDb, RottenTomatoes */}
             <div className="flex flex-wrap gap-2 mb-4">
               {movieInfo.imdbRating && movieInfo.imdbRating !== 'N/A' && (
                 <div className="flex items-center bg-gray-800 rounded-full px-3 py-1">
@@ -183,7 +172,7 @@ const MovieInfo = ({ movieInfo }) => {
               </div>
             </div>
             
-            {/* Butoane */}
+            {/* Butoane (doar pt design) */}
             <div className="flex mt-6 space-x-4">
               <button className="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md flex items-center font-medium transition-colors duration-300">
                 Vizionează
