@@ -11,7 +11,7 @@ const CacheManager = ({ cacheSize, clearExpiredCache, clearCache }) => {
         className="w-full px-4 py-3 flex justify-between items-center focus:outline-none cursor-pointer"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-          <h3 className="text-lg font-medium text-gray-300">Setări avansate</h3>
+       <h3 className="text-lg font-medium text-gray-300">Setări avansate</h3>
       </button>
       
       {/* Conținut dupa apasare buton */}

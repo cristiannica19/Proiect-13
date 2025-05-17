@@ -5,14 +5,19 @@ const MovieInfo = ({ movieInfo }) => {
     
     // Încercăm să găsim rating-ul Rotten Tomatoes
     const rtRating = movieInfo.Ratings.find(rating => rating.Source === 'Rotten Tomatoes');
+    
     if (!rtRating && movieInfo.Ratings.length >= 2) {
       // Folosim al doilea rating disponibil dacă nu există Rotten Tomatoes
       const score = parseInt(movieInfo.Ratings[1].Value.replace(/[^0-9]/g, ''));
       return getRecommendationByScore(score);
-    } else if (rtRating) {
+    } 
+    
+    else if (rtRating) {
       const score = parseInt(rtRating.Value.replace('%', ''));
       return getRecommendationByScore(score);
-    } else if (movieInfo.imdbRating) {
+    } 
+    
+    else if (movieInfo.imdbRating) {
       // Folosim rating-ul IMDB dacă nu avem alte ratinguri
       const score = parseFloat(movieInfo.imdbRating) * 10;
       return getRecommendationByScore(score);
@@ -23,17 +28,23 @@ const MovieInfo = ({ movieInfo }) => {
   
   // Obține recomandarea în funcție de scor
   const getRecommendationByScore = (score) => {
-    if (score >= 80) {
+    if (score > 80) {
       return { 
         text: 'Ar trebui să vizionați acest film chiar acum!', 
         color: 'green',
         icon: '👍'
       };
-    } else if (score <= 50) {
+    } else if (score < 50) {
       return { 
         text: 'Nu recomandăm acest film!', 
         color: 'red',
         icon: '👎'
+      };
+    } else {
+      return { 
+        text: 'Acest film are un rating decent.', 
+        color: 'blue',
+        icon: '🤔'
       };
     }
   };
