@@ -1,8 +1,9 @@
+
 // Constanta pentru expirarea cache-ului (24 ore)
 const CACHE_EXPIRATION = 24 * 60 * 60 * 1000;
 
-// Cheia API - în producție, ar trebui stocată într-un fișier .env
-const API_KEY = 'a7b2b324';
+// Cheia API -
+const API_KEY = import.meta.env.VITE_APICHEIE;
 
 /**
  * Serviciu pentru interacțiunea cu OMDb API și gestionarea cache-ului.
