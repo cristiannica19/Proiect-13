@@ -1,12 +1,67 @@
-# React + Vite
+##### Proiect 13 - creat cu React+TailwindCSS si Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Componenta principala (App.jsx) - organizeaza intreaga aplicatie
+SearchBar - bara de cautare pentru introducerea numelui filmului
+MovieInfo - afiseaza detaliile filmului gasit
+CacheManager - gestioneaza cache-ul local pentru filme
+useMovieSearch - hook personalizat pentru logica de cautare
+movieService - serviciu pentru interactiunea cu API-ul si localStorage
 
-Currently, two official plugins are available:
+##### Fluxul de functionare al aplicatiei:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Când aplicatia se incarca:
 
-## Expanding the ESLint configuration
+Se afiseaza un ecran initial care indeamna utilizatorul sa caute un film
+Se verifica câte filme sunt deja in localStorage (cache)
+Se actualizeaza UI-ul cu aceasta informatie
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+2. Procesul de cautare a unui film
+
+ - Introducerea datelor:
+
+Utilizatorul introduce numele filmului in SearchBar
+Starea movieName se actualizeaza prin setMovieName cu fiecare tasta apasata
+
+- Initierea cautarii:
+
+La apasarea butonului "Cauta" sau la tasta Enter
+Se apeleaza functia handleSearch din hook-ul useMovieSearch
+
+- Verificarea cache-ului:
+
+Se verifica daca filmul exista deja in localStorage folosind functia getCachedMovie
+Daca filmul exista si nu a expirat (mai putin de 24 ore), se folosesc datele din cache
+
+ - Cautarea prin API (daca nu exista in cache):
+
+Se face o cerere catre OMDB API prin functia searchMovie
+Datele primite sunt stocate in starea movieInfo
+Filmul este adaugat in cache pentru cautari viitoare prin cacheMovie
+
+3. Afisarea informatiilor filmului
+
+- Când datele filmului sunt disponibile:
+
+Componenta MovieInfo primeste datele -> Datele sunt transmise ca props catre componenta MovieInfo
+
+Se cauta rating-ul de pe Rotten Tomatoes sau se converteste rating-ul IMDb
+In functie de scor, se genereaza o recomandare personalizata:
+
+ - Afisarea informatiilor:
+
+Poster, titlu, an, rating, durata, plot, actori, regizor, gen si recomandare
+
+4. Gestionarea cache-ului
+
+ - Aplicatia utilizeaza localStorage pentru a stoca datele filmelor cautate:
+
+ - Structura cache-ului:
+
+Fiecare film este stocat cu prefix movie_ urmat de numele filmului
+Se stocheaza atât datele filmului, cât si timestamp-ul când a fost adaugat
+Cache-ul expira dupa 24 ore (CACHE_EXPIRATION = 24 * 60 * 60 * 1000 ms)
+
+ - Interfata de gestionare:
+
+Componenta CacheManager permite utilizatorului sa vada câte filme sunt in cache
+Ofera optiunea de a sterge cache-ul expirat sau tot cache-ul
